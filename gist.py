@@ -3,7 +3,7 @@ import re
 import requests
 
 from nbformat import current as nbformat
-import nbconvert.nbconvert as nbconvert
+import nbconvert.converters.reveal as nbconvert
 
 from flask import Flask , request, render_template
 from flask import redirect, abort, Response
@@ -156,7 +156,7 @@ other_views = """<div style="position:absolute; right:1em; top:1em; padding:0.4e
 </div>"""
 
 def render_content(content, url=None):
-    converter = nbconvert.ConverterHTML()
+    converter = nbconvert.ConverterReveal()
     if url:
         converter.extra_body_start_html = other_views.format(url=url)
     converter.nb = nbformat.reads_json(content)
