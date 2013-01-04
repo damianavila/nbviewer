@@ -18,6 +18,12 @@ class ConverterReveal(ConverterHTML):
     # based in reveal.js library.
     #"""
 
+    def __init__(self):
+        pass
+
+    def read(self):
+        pass
+
     @text_cell
     def render_heading(self, cell):
         marker = cell.level
@@ -190,16 +196,6 @@ class ConverterReveal(ConverterHTML):
         assert(type(self.output) == unicode)
         return self.save()
 
-    def save(self, outfile=None, encoding=None):
-        "read and parse notebook into self.nb"
-        if outfile is None:
-            outfile = self.outbase + '_slides.' + 'html'
-        if encoding is None:
-            encoding = self.default_encoding
-        with io.open(outfile, 'w', encoding=encoding) as f:
-            f.write(self.output)
-        return os.path.abspath(outfile)
-
     def header_body(self):
         "return the body of the header as a list of strings"
         from pygments.formatters import HtmlFormatter
@@ -245,30 +241,6 @@ class ConverterReveal(ConverterHTML):
             lambda x: x == u'%slides%') if not x[0]]
         return splitted_temp
 
-    def template_notesjs(self):
-        #"split the reveal_template.html in header and footer lists"
-        temp = self.template_read('notes_base.js')
-        for i, j in enumerate(temp):
-            if j == u'%source%':
-                temp[i] = '\'' + self.outbase + '_notes.html\''
-        here = os.path.split(os.path.realpath(__file__))[0]
-        path_js = os.path.join(here, '..', 'js', self.outbase + '_notes.js')
-        with io.open(path_js, 'w',
-                     encoding=self.default_encoding) as f:
-            f.write('\n'.join(temp))
-        return []
-
-    def template_notes(self):
-        #"split the reveal_template.html in header and footer lists"
-        temp = self.template_read('notes_base.html')
-        for i, j in enumerate(temp):
-            if j == u'%source%':
-                temp[i] = 'src=\"' + self.outbase + '_slides.html\"'
-        with io.open(self.outbase + '_notes.html', 'w',
-                     encoding=self.default_encoding) as f:
-            f.write('\n'.join(temp))
-        return []
-
     def optional_header(self):
         optional_header_body = self.template_split()
         return ['<!DOCTYPE html>', '<html>', '<head>'] + \
@@ -280,5 +252,5 @@ class ConverterReveal(ConverterHTML):
         for i, j in enumerate(optional_footer_body[1]):
             if j == u'%source%':
                 optional_footer_body[1][i] = \
-                    'src: \'js/' + self.outbase + '_notes.js\''
+                    'src: \'/static/reveal/plugin/notes/notes.js\''
         return optional_footer_body[1] + ['</body>', '</html>']
