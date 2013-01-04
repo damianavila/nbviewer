@@ -1,5 +1,5 @@
 from __future__ import print_function, absolute_import
-from converters.utils import remove_fake_files_url
+from .utils import remove_fake_files_url
 
 # Stdlib
 import codecs
