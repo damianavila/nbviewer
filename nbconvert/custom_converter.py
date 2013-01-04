@@ -1,10 +1,11 @@
 """
-This module gives a simple example of a custom notebook converter taht only
-captures display data and deletes the cell inputs. 
+This module gives a simple example of a custom notebook converter that only
+captures display data and deletes the cell inputs.
 """
 
 import copy
 import nbconvert as nb
+
 
 class CustomNotebookConverter(nb.ConverterNotebook):
 
@@ -24,4 +25,3 @@ if __name__ == '__main__':
     infile = 'tests/test_display.ipynb'
     converter = CustomNotebookConverter(infile, 'test_only_display')
     converter.render()
-
